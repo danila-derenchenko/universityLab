@@ -21,16 +21,16 @@ class Tree:
                 return self.__find(node.right, node, value)
         return node, parent, False
 
-    def searchMinX(self, node, parent, value):
+    def searchMinX(self, node, parent, value, flag):
         if value <= node.data:
             if node.left is not None:
-                return self.searchMinX(node.left, node, value)
-            if parent is None:
+                return self.searchMinX(node.left, node, value, flag)
+            if parent is None or (flag and node.data > value):
                 return None
             return parent.data
         else:
             if node.right is not None:
-                return self.searchMinX(node.right, node, value)
+                return self.searchMinX(node.right, node, value, flag)
             return node.data
 
     def addNode(self, obj):
@@ -47,11 +47,11 @@ class Tree:
 
     def generateTree(self):
         arr = []
-        for i in range(15):
+        for i in range(14):
             arr.append(random.randint(0, 120))
-        self.addNode(Node(arr[15 // 2]))
+        self.addNode(Node(arr[14 // 2]))
         for i in arr:
-            if i != arr[15 // 2]:
+            if i != arr[14 // 2]:
                 self.addNode(Node(i))
         self.show_tree(self.root)
         return arr
@@ -87,7 +87,12 @@ class Tree:
 
 
 
+
+
+
+
 binTree = Tree()
+
 
 
 selectMode = int(input("Какое дерево сгенерировать? Введите 1, если двоичное, введите 2, если B+: "))
@@ -103,4 +108,4 @@ if selectMode == 1:
         if selectAction == 2:
             xKey = int(input("Введите ключ для поиска: "))
             print("Результат поиска: ")
-            print(binTree.searchMinX(binTree.root, None, xKey))
+            print(binTree.searchMinX(binTree.root, None, xKey, False))
