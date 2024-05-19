@@ -1,7 +1,10 @@
+import random
+
 class Node:
     def __init__(self, data):
         self.data = data
-        self.left = self.right = None
+        self.left = None
+        self.right = None
 
 class Tree:
     def __init__(self):
@@ -10,15 +13,25 @@ class Tree:
     def __find(self, node, parent, value):
         if node is None:
             return None, parent, False
-        if value == node.data:
-            return node, parent, True
         if value < node.data:
             if node.left:
                 return self.__find(node.left, node, value)
-        if value > node.data:
+        if value >= node.data:
             if node.right:
                 return self.__find(node.right, node, value)
         return node, parent, False
+
+    def searchMinX(self, node, parent, value):
+        if value <= node.data:
+            if node.left is not None:
+                return self.searchMinX(node.left, node, value)
+            if parent is None:
+                return None
+            return parent.data
+        else:
+            if node.right is not None:
+                return self.searchMinX(node.right, node, value)
+            return node.data
 
     def addNode(self, obj):
         if self.root is None:
@@ -31,6 +44,18 @@ class Tree:
             else:
                 s.right = obj
         return obj
+
+    def generateTree(self):
+        arr = []
+        for i in range(15):
+            arr.append(random.randint(0, 120))
+        self.addNode(Node(arr[15 // 2]))
+        for i in arr:
+            if i != arr[15 // 2]:
+                self.addNode(Node(i))
+        self.show_tree(self.root)
+        return arr
+
 
     def del_leaf(self, s, p):
         if p.left == s:
@@ -66,21 +91,6 @@ class Tree:
             sr, pr = self.findMin(s.right, s)
             s.data = sr.data
             self.delOneChild(sr, pr)
-    def getTreeDepth(self, node):
-        if node is None:
-            return
-        v = [node]
-        depth = 0
-        while v:
-            vn = []
-            for x in v:
-                if x.left:
-                    vn += [x.left]
-                if x.right:
-                    vn += [x.right]
-            v = vn
-            depth += 1
-        return depth
 
     def show_tree(self, node):
         def height(node):
@@ -115,9 +125,19 @@ class Tree:
 v = [20, 10, 35, 15, 17, 27, 24, 8, 30]
 
 binTree = Tree()
-for x in v:
-    binTree.addNode(Node(x))
 
-binTree.show_tree(binTree.root)
-print("Постфиксный обход: ")
-binTree.postordertraversal(binTree.root)
+
+selectMode = int(input("Какое дерево сгенерировать? Введите 1, если двоичное, введите 2, если B+: "))
+if selectMode == 1:
+    print("Двоичное дерево:")
+    print(binTree.generateTree())
+    while True:
+        selectAction = int(input("Выберите действие: 1. Выполнить постфиксный обход(обход снизу вверх), \n2. Выполнить поиск значения по близости снизу: "))
+        if selectAction == 1:
+            print("Постфиксный обход (обход снизу вверх)")
+            binTree.postordertraversal(binTree.root)
+            print()
+        if selectAction == 2:
+            xKey = int(input("Введите ключ для поиска: "))
+            print("Результат поиска: ")
+            print(binTree.searchMinX(binTree.root, None, xKey))
