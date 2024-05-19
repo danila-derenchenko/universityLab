@@ -56,49 +56,13 @@ class Tree:
         self.show_tree(self.root)
         return arr
 
-
-    def del_leaf(self, s, p):
-        if p.left == s:
-            p.left = None
-        elif p.right == s:
-            p.right = None
-
-    def delOneChild(self, s, p):
-        if p.left == s:
-            if s.left is None:
-                p.left = s.right
-            elif s.right is None:
-                p.left = s.left
-        elif p.right == s:
-            if s.left is None:
-                p.right = s.right
-            elif s.right is None:
-                p.right = s.left
-    def findMin(self, node, parent):
-        if node.left:
-            return self.findMin(node.left, node)
-        return node, parent
-
-    def delNode(self, key):
-        s, p, flag_find = self.__find(self.root, None, key)
-        if not flag_find:
-            return None
-        if s.right is None and s.left is None:
-            self.del_leaf(s, p)
-        elif s.left is None or s.right is None:
-            self.delOneChild(s, p)
-        else:
-            sr, pr = self.findMin(s.right, s)
-            s.data = sr.data
-            self.delOneChild(sr, pr)
-
     def show_tree(self, node):
         def height(node):
             if node is None:
                 return 0
             else:
                 return max(height(node.left), height(node.right)) + 1
-        print('Правое поддерево')
+        print('ПРАВОЕ ПОДДЕРЕВО')
 
         def print_tree(node, space=0):
             if node is None:
@@ -113,7 +77,7 @@ class Tree:
 
         max_height = height(node)
         print_tree(node)
-        print('Левое поддерево')
+        print('ЛЕВОЕ ПОДДЕРЕВО')
 
     def postordertraversal(self, node):
         if node:
@@ -122,7 +86,6 @@ class Tree:
             print(node.data, end=" ")
 
 
-v = [20, 10, 35, 15, 17, 27, 24, 8, 30]
 
 binTree = Tree()
 
@@ -132,7 +95,7 @@ if selectMode == 1:
     print("Двоичное дерево:")
     print(binTree.generateTree())
     while True:
-        selectAction = int(input("Выберите действие: 1. Выполнить постфиксный обход(обход снизу вверх), \n2. Выполнить поиск значения по близости снизу: "))
+        selectAction = int(input("Выберите действие: 1. Выполнить постфиксный обход(обход снизу вверх), \n2. Выполнить поиск значения по близости снизу: \nВаш выбор: "))
         if selectAction == 1:
             print("Постфиксный обход (обход снизу вверх)")
             binTree.postordertraversal(binTree.root)
